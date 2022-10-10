@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
         recyclerViewAdapter = RecyclerViewAdapter()
         recyclerView?.adapter = recyclerViewAdapter
 
-
         mainActivityViewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
 
         btnClick?.setOnClickListener {

@@ -34,7 +34,6 @@ class RecyclerViewAdapter: RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>(
         holder.nat.text = api.nat
     }
 
-
     override fun getItemCount(): Int {
         return responseList.size
     }
