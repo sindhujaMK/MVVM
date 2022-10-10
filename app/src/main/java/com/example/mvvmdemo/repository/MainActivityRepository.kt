@@ -31,6 +31,7 @@ object MainActivityRepository {
                 val msg = data!!.results
 
                 serviceSetterGetter.value = ServicesSetterGetter(msg)
+
             }
         })
 

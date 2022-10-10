@@ -43,6 +43,7 @@ class RecyclerViewAdapter: RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>(
         notifyDataSetChanged()
     }
 
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val gender = itemView.findViewById(R.id.tvGender) as TextView
