@@ -1,40 +1,79 @@
 package com.example.mvvmdemo.view
 
+import android.net.Uri
 import android.os.Bundle
-import android.widget.Button
+import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.mvvmdemo.R
+import coil.load
 import com.example.mvvmdemo.adapter.RecyclerViewAdapter
+import com.example.mvvmdemo.databinding.ActivityMainBinding
 import com.example.mvvmdemo.viewmodel.MainActivityViewModel
 
 
 class MainActivity : AppCompatActivity() {
+    //this is the variable instantiated for view binding. viewbinding can be used instead of findViewById. it is turned on in build.gradle file
+    private var binding: ActivityMainBinding? = null
 
-    private var btnClick: Button? = null
-        get() = findViewById(R.id.btnClick)
-    private lateinit var recyclerViewAdapter: RecyclerViewAdapter
-    private var recyclerView: RecyclerView? = null
-        get() = findViewById(R.id.rvData)
+    private var recyclerViewAdapter: RecyclerViewAdapter? = null
     private lateinit var mainActivityViewModel: MainActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding?.root)
 
-        recyclerView?.layoutManager = LinearLayoutManager(this@MainActivity)
-        recyclerViewAdapter = RecyclerViewAdapter()
-        recyclerView?.adapter = recyclerViewAdapter
+        init()
+        initViews()
+        handleEvents()
+    }
 
+
+    private fun init() {
         mainActivityViewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
+        recyclerViewAdapter = RecyclerViewAdapter()
+    }
 
-        btnClick?.setOnClickListener {
-            mainActivityViewModel.getUser()?.observe(this) { serviceSetterGetter ->
-                val msg = serviceSetterGetter.results
-                recyclerViewAdapter.setList(msg)
+    private fun initViews() {
+        binding?.rvData?.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = recyclerViewAdapter
+        }
+    }
+
+
+    private fun handleEvents() {
+
+        binding?.btnClick?.setOnClickListener {
+
+            binding?.progressBar?.visibility = View.VISIBLE
+
+            mainActivityViewModel.getUser()?.observe(this) { result ->
+                logThis("response: $result")
+                result?.let {
+                    recyclerViewAdapter?.setList(it)
+
+                    binding?.progressBar?.visibility = View.GONE
+                }
+            }
+        }
+
+        binding?.btnRandomImage?.setOnClickListener {
+
+            binding?.progressBar?.visibility = View.VISIBLE
+
+            mainActivityViewModel.getPhotos()?.observe(this) { result ->
+                binding?.imageView?.load(result?.url)
+                binding?.progressBar?.visibility = View.GONE
             }
         }
     }
+
+}
+
+fun logThis(message: Any?) {
+    Log.d("logThis", "-->: $message")
 }

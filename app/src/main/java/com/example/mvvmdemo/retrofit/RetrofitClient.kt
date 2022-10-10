@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
 
-    private const val MainServer = "https://randomuser.me"
+    private const val MainServer = "https://jsonplaceholder.typicode.com/"
 
     private val retrofitClient: Retrofit.Builder by lazy {
 
